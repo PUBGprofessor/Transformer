@@ -58,7 +58,7 @@ class trainer:
             val_metric_sum = 0.
             for val_step, (inp, targ) in enumerate(self.val_dataloader, start=1):
                 # inp [64, 10] , targ [64, 10]
-                loss, metric = self.validate_step(self.model, inp, targ)
+                loss, metric = self.validate_step(inp, targ)
 
                 val_loss_sum += loss
                 val_metric_sum += metric
