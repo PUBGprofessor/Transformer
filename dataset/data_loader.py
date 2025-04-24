@@ -7,6 +7,24 @@ from tqdm import tqdm  # 进度条
 import pandas as pd
 import unicodedata
 
+tokenizer = lambda x: x.split() # 分词器
+
+def tokenizer_encode(sentence, vocab):
+    # print(type(vocab)) # torchtext.vocab.Vocab
+    # print(len(vocab))
+    sentence = normalizeString(sentence)
+    # print(type(sentence)) # str
+    sentence = tokenizer(sentence)  # list
+    sentence = ['<start>'] + sentence + ['<end>']
+    sentence_ids = [vocab.stoi[token] for token in sentence]
+    # print(sentence_ids, type(sentence_ids[0])) # int
+    return sentence_ids
+
+
+def tokenzier_decode(sentence_ids, vocab):
+    sentence = [vocab.itos[id] for id in sentence_ids if id<len(vocab)]
+    # print(sentence)
+    return " ".join(sentence)
 
 # 将数据管道组织成与torch.utils.data.DataLoader相似的inputs, targets的输出形式
 class DataLoader:
@@ -21,7 +39,6 @@ class DataLoader:
         # 注意，在此处调整text的shape为batch first
         for batch in self.data_iter:
             yield (torch.transpose(batch.src, 0, 1), torch.transpose(batch.targ, 0, 1)) # [batch_size, seq_len]
-tokenizer = lambda x: x.split() # 分词器
 
 # 将unicode字符串转化为ASCII码：
 def unicodeToAscii(s):
