@@ -17,11 +17,11 @@ class DecoderLayer(nn.Module):
         self.attn_2 = MultiHeadAttention(heads, d_model, dropout=dropout)
         self.ff = FeedForward(d_model, dropout=dropout)
 
-    def forward(self, x, e_outputs, src_mask, trg_mask):
+    def forward(self, x, e_outputs, look_ahead_mask, trg_mask):
         x2 = self.norm_1(x)
-        x = x + self.dropout_1(self.attn_1(x2, x2, x2, trg_mask))
+        x = x + self.dropout_1(self.attn_1(x2, x2, x2, look_ahead_mask))
         x2 = self.norm_2(x)
-        x = x + self.dropout_2(self.attn_2(x2, e_outputs, e_outputs, src_mask))
+        x = x + self.dropout_2(self.attn_2(x2, e_outputs, e_outputs, trg_mask))
         x2 = self.norm_3(x)
         x = x + self.dropout_3(self.ff(x2))
         return x # [batch_size, seq_len, d_model]
@@ -34,9 +34,9 @@ class Decoder(nn.Module):
         self.pe = PositionalEncoder(d_model)
         self.layers = get_clones(DecoderLayer(d_model, heads, dropout), N)
         self.norm = Norm(d_model)
-    def forward(self, trg, e_outputs, src_mask, trg_mask):
+    def forward(self, trg, e_outputs, look_ahead_mask, trg_mask):
         x= self.embed(trg)
         x= self.pe(x)
         for i in range(self.N):
-            x = self.layers[i](x, e_outputs, src_mask, trg_mask)
+            x = self.layers[i](x, e_outputs, look_ahead_mask, trg_mask)
         return self.norm(x)

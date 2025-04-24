@@ -40,7 +40,7 @@ def normalizeString(s):
     return s
 
 
-# 删除原始文本长度大于10个标记的样本
+# 删除原始文本长度大于MAX_LENGTH个标记的样本
 def filterPair(p, MAX_LENGTH=60):
     return len(p[0].split(' ')) < MAX_LENGTH and len(p[1].split(' ')) < MAX_LENGTH # startswith first arg must be str or a tuple of str
 

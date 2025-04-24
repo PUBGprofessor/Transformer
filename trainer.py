@@ -122,7 +122,7 @@ class trainer:
         self.optimizer.zero_grad()  # 梯度清零
 
         # forward
-        prediction = self.model(inp, targ_inp, enc_padding_mask, dec_padding_mask)
+        prediction = self.model(inp, targ_inp, enc_padding_mask, combined_mask, dec_padding_mask)
         # [b, targ_seq_len, target_vocab_size]
         # {'..block1': [b, num_heads, targ_seq_len, targ_seq_len],
         #  '..block2': [b, num_heads, targ_seq_len, inp_seq_len], ...}
@@ -153,7 +153,7 @@ class trainer:
 
         with torch.no_grad():
             # forward
-            prediction = self.model(inp, targ_inp, enc_padding_mask, dec_padding_mask)
+            prediction = self.model(inp, targ_inp, enc_padding_mask, combined_mask, dec_padding_mask)
             # [b, targ_seq_len, target_vocab_size]
             # {'..block1': [b, num_heads, targ_seq_len, targ_seq_len],
             #  '..block2': [b, num_heads, targ_seq_len, inp_seq_len], ...}

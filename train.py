@@ -18,18 +18,18 @@ project_dir = './'
 cwd = project_dir
 data_dir = cwd + './data/' # 数据所在目录
 num_layers = 6 # 编码器和解码器的层数
-d_model = 128
+d_model = 512
 # dff = 512
 num_heads = 8
-EPOCHS = 100 # 50 # 30  # 20
+EPOCHS = 50 # 50 # 30  # 20
 print_trainstep_every = 50  # 每50个step做一次打印
 save_dir = './save_model/'  # 模型保存目录
 MAX_LENGTH = 60 # 句子最大长度
 dropout_rate = 0.1
 pad = 1 # padding的ID
-BATCH_SIZE = 128 * ngpu
+BATCH_SIZE = 64 * ngpu
 
-train_dataloader, val_dataloader, SRC_TEXT, TARG_TEXT, input_vocab_size, target_vocab_size = load_data(data_dir, MAX_LENGTH, BATCH_SIZE=64)
+train_dataloader, val_dataloader, SRC_TEXT, TARG_TEXT, input_vocab_size, target_vocab_size = load_data(data_dir, MAX_LENGTH, BATCH_SIZE=BATCH_SIZE)
 
 transformer = Transformer(
                             src_vocab=input_vocab_size,
